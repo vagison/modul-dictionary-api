@@ -1,8 +1,8 @@
 # Modul Technical Dictionary API
-Final project for Modul Technical Dictionary API
+Final project for the API of Modul Technical Dictionary 
 
 ## About the project
-This English-Armenian / Armenian-English online technical dictionary includes more than 5000 entries (including: words, phrases and abbreviations) that are widely used in various technical fields.
+This English-Armenian / Armenian-English technical dictionary includes more than 5000 entries (including: words, phrases and abbreviations) that are widely used in various technical fields.
 
 ## About requirements for the project
 1. The DBMS used for the project is MySQL. You need to install it if don't currently have it
