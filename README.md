@@ -14,3 +14,5 @@ This English-Armenian / Armenian-English technical dictionary includes more than
 3. Import the data into selected scheme from `data` folder of this project
 4. Run `npm install`
 5. Run `npm start`
+
+
