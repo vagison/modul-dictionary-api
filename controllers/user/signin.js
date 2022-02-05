@@ -6,6 +6,9 @@ const bcrypt = require("bcryptjs");
 // importing Users model
 const User = require("../../models/user");
 
+// importing email RegExp
+const {emailRegex} = require("../../util/regexp")
+
 // importing cookie-making mechanism
 const cookieMaker = require("../../util/cookie-maker");
 
@@ -14,6 +17,11 @@ exports.signin = async (req, res, next) => {
   try {
     // Getting the input from the request
     const { email, password } = req.body;
+
+    // Handling wrong input data
+    if(!email||!(email.match(emailRegex))||!password) {
+      return res.status(404).send("Wrong user data!");
+    }
 
     // Finding the user
     const user = await User.findOne({

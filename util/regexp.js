@@ -5,4 +5,5 @@ module.exports = {
   engChars: new RegExp("[\u0041-\u005a\u0061-\u007a]"),
   numChars: new RegExp("[0-9]"),
   skipChars: "[\\s-.․/\\\\~=+&$%^#@!`_*<>,?:;{}\\[\\]]",
+  emailRegex: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/
 };
