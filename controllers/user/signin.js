@@ -7,7 +7,7 @@ const bcrypt = require("bcryptjs");
 const User = require("../../models/user");
 
 // importing email RegExp
-const {emailRegex} = require("../../util/regexp")
+const { emailRegex } = require("../../util/regexp");
 
 // importing cookie-making mechanism
 const cookieMaker = require("../../util/cookie-maker");
@@ -19,8 +19,8 @@ exports.signin = async (req, res, next) => {
     const { email, password } = req.body;
 
     // Handling wrong input data
-    if(!email||!(email.match(emailRegex))||!password) {
-      return res.status(404).send("Wrong user data!");
+    if (!email || !email.match(emailRegex) || !password) {
+      return res.status(500).send("Wrong user data!");
     }
 
     // Finding the user
@@ -38,20 +38,20 @@ exports.signin = async (req, res, next) => {
       // If the password is correct
       if (validPass) {
         // Making cookies for the user
-        const cookies = await cookieMaker(email, res)
+        const cookies = await cookieMaker(email, res);
 
         // Sending status for successfully logging in
         if (cookies) {
-          return cookies.send("User logged in succesfully!")
+          return cookies.send("User logged in succesfully!");
         }
       }
-      
+
       // If the password is incorrect
       else {
         // Sending status 500 for the incorrect password
         return res.status(500).send("Wrong password!");
       }
-    } 
+    }
 
     // If user is not found
     else {
@@ -59,7 +59,6 @@ exports.signin = async (req, res, next) => {
       return res.status(404).send("User not found!");
     }
   } 
-  
   catch (error) {
     // If there was another error - send status 500
     res.status(500).send("Something else broke!");

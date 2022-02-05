@@ -7,7 +7,7 @@ const bcrypt = require("bcryptjs");
 const User = require("../../models/user");
 
 // importing email RegExp
-const {emailRegex} = require("../../util/regexp")
+const { emailRegex } = require("../../util/regexp");
 
 // --- Setting up and exporting user registration function
 exports.register = async (req, res, next) => {
@@ -16,8 +16,8 @@ exports.register = async (req, res, next) => {
     const { email, password } = req.body;
 
     // Handling wrong input data
-    if(!email||!(email.match(emailRegex))||!password) {
-      throw "Wrong user data!"
+    if (!email || !email.match(emailRegex) || !password) {
+      throw "Wrong user data!";
     }
 
     // Hashing the password
@@ -35,7 +35,7 @@ exports.register = async (req, res, next) => {
     if (newUser) {
       return res.status(200).send("User registered succesfully!");
     }
-    
+
     // Sending status for already existing user
     else if (!newUser) {
       return res.status(200).send("User already exists!");
@@ -43,7 +43,6 @@ exports.register = async (req, res, next) => {
   } 
   catch (error) {
     // If there was another error - send status 500
-    console.log(error)
     res.status(500).send("Something else broke!");
   }
 };
