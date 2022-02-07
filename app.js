@@ -85,8 +85,8 @@ app.use("/", routes);
 // db.sync({ force: true })
 db.sync()
   .then(() => {
-    app.listen(3000);
-    console.log("App is running at 3000!");
+    app.listen(process.env.PORT || 3000);
+    console.log(`App is running at ${process.env.PORT}!`);
   })
   .catch((error) => {
     console.log(error);
