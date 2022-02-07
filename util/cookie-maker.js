@@ -65,6 +65,8 @@ async function cookieMaker(email, res) {
     );
 
     // Returning cookies an status 200 as success
+
+    console.log("Stee")
     return res
       .status(200)
       .cookie("user", email, {
