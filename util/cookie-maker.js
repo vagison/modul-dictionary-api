@@ -70,17 +70,22 @@ async function cookieMaker(email, res) {
       .cookie("user", email, {
         httpOnly: true,
         sameSite: "none",
+        secure: true,
+
         path: "/",
         expires: cookieExpirationDate,
       })
       .cookie("login", loginCookieValue, {
         httpOnly: true,
         sameSite: "none",
+        secure: true,
         path: "/",
         expires: cookieExpirationDate,
       })
       .cookie("token", tokenCookieValue, {
         sameSite: "none",
+        secure: true,
+
         path: "/",
         expires: cookieExpirationDate,
       });
