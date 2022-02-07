@@ -5,6 +5,7 @@ const { Sequelize } = require("sequelize");
 
 // --- Creating the database connection
 const db = new Sequelize(process.env.JAWSDB_URL);
+
 // const db = new Sequelize("heroku_8e735f498ab729b", "bf6f17aa9a7172", "a0067d96", {
 //   dialect: "mysql",
 //   host: "us-cdbr-east-05.cleardb.net",
