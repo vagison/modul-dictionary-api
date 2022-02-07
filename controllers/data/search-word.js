@@ -16,11 +16,12 @@ exports.searchWord = async (req, res, next) => {
   try {
     // Getting the input from the request
     const { searchedWord } = req.body;
-
+    console.log(1)
     // Empty word handling
     if (!searchedWord) {
       return res.status(500).send("Nothing searched!");
     }
+    console.log(2)
 
     // Setting up direction and picking correct language based on the searched word
     var direction;
@@ -42,6 +43,8 @@ exports.searchWord = async (req, res, next) => {
       // If there was a problem with reading the language - send status 500 and the error 
       return res.status(500).send(error);
     }
+    console.log(3)
+
 
     // Words appending function
     async function appendWordsToCollection(searchedWord, direction, collection) {
@@ -327,24 +330,28 @@ exports.searchWord = async (req, res, next) => {
     try {
       // Creating a collection of words and abbreviations
       var wordsAndAbbreviationsCollection = [];
+      console.log(4)
+
       
       // Appending words to the collection
       wordsAndAbbreviationsCollection = await appendWordsToCollection(searchedWord, direction, wordsAndAbbreviationsCollection);
-
+      console.log(5)
       // Appending abbreviations to the collection
       wordsAndAbbreviationsCollection = await appendAbbreviationsToCollection(searchedWord, direction, wordsAndAbbreviationsCollection);
-
+      console.log(6)
       // Creating a response object from the collection of words and abbreviations and the direction
       var response = {};
-
+      console.log(7)
       // Appending the collection to the response
       response = await appendCollectionToResponse(
         wordsAndAbbreviationsCollection,
         response
       );
+      console.log(8)
 
       // Appending the direction to the response
       response = await appendDirectionToResponse(direction, response);
+      console.log(9)
 
       // Sending the response
       return res.status(200).send(response);
