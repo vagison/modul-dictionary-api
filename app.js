@@ -75,7 +75,7 @@ const corsOptions = {
   credentials: true,
   optionSuccessStatus: 200,
 };
-// app.use(cors(corsOptions)); // Use this after the variable declaration
+app.use(cors(corsOptions)); // Use this after the variable declaration
 
 // connecting with routes
 const routes = require("./routes/routes");
