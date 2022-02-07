@@ -15,6 +15,7 @@ const cookieMaker = require("../../util/cookie-maker");
 // --- Setting up and exporting user login function
 exports.signin = async (req, res, next) => {
   try {
+    console.log("asdasdas", req)
     // Getting the input from the request
     const { email, password } = req.body;
 
