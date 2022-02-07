@@ -65,23 +65,25 @@ async function cookieMaker(email, res) {
     );
 
     // Returning cookies an status 200 as success
-
     return res
       .status(200)
       .cookie("user", email, {
         httpOnly: true,
-        sameSite: "strict",
+        sameSite: "none", 
+        secure: true,        
         path: "/",
         expires: cookieExpirationDate,
       })
       .cookie("login", loginCookieValue, {
         httpOnly: true,
-        sameSite: "strict",
+        sameSite: "none", 
+        secure: true,
         path: "/",
         expires: cookieExpirationDate,
       })
       .cookie("token", tokenCookieValue, {
-        sameSite: "strict",
+        sameSite: "none", 
+        secure: true,
         path: "/",
         expires: cookieExpirationDate,
       });
