@@ -352,6 +352,7 @@ exports.searchWord = async (req, res, next) => {
     
     // Sending error as incorrect word selected
     catch (error) {
+      console.log(error)
       return res.status(500).send("Wrong word searched!");
     }
   } 
