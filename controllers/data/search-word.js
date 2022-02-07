@@ -337,7 +337,7 @@ exports.searchWord = async (req, res, next) => {
       wordsAndAbbreviationsCollection = await appendWordsToCollection(searchedWord, direction, wordsAndAbbreviationsCollection);
       console.log(5)
       // Appending abbreviations to the collection
-      wordsAndAbbreviationsCollection = await appendAbbreviationsToCollection(searchedWord, direction, wordsAndAbbreviationsCollection);
+      // wordsAndAbbreviationsCollection = await appendAbbreviationsToCollection(searchedWord, direction, wordsAndAbbreviationsCollection);
       console.log(6)
       // Creating a response object from the collection of words and abbreviations and the direction
       var response = {};
