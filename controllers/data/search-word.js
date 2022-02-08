@@ -71,6 +71,11 @@ exports.searchWord = async (req, res, next) => {
                   [Op.like]: `% ${filter}%`,
                 },
               },
+              {
+                word: {
+                  [Op.like]: `%-${filter}%`,
+                },
+              },
             ],
           },
           order: [["word", "ASC"]],

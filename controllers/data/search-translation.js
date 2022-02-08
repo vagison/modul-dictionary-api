@@ -78,27 +78,12 @@ exports.searchTranslation = async (req, res, next) => {
                 },
                 {
                   word: {
-                    [Op.like]: `${word["label"]+"-"}%`,
-                  },
-                },
-                {
-                  word: {
                     [Op.like]: `% ${word["label"]}`,
                   },
                 },
                 {
                   word: {
-                    [Op.like]: `${"%-"+word["label"]}`,
-                  },
-                },
-                {
-                  word: {
                     [Op.like]: `% ${word["label"]} %`,
-                  },
-                },
-                {
-                  word: {
-                    [Op.like]: `%-${word["label"]}-%`,
                   },
                 },
               ],
