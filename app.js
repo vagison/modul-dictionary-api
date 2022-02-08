@@ -71,7 +71,7 @@ app.use(bodyParser.json());
 
 // configuring CORS
 const corsOptions = {
-  origin: true,
+  origin: "https://modul-dictionary.herokuapp.com/",
   credentials: true,
   optionSuccessStatus: 200,
 };
@@ -82,9 +82,6 @@ const routes = require("./routes/routes");
 app.use("/", routes);
 
 // --- Syncing models with the database and listening the server
-
-// app.listen(process.env.PORT || 3000);
-
 // db.sync({ force: true })
 db.sync()
   .then(() => {
