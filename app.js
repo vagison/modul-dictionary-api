@@ -66,10 +66,6 @@ const app = express();
 // configuring cookie parser
 app.use(cookieParser());
 
-// app.use(session({
-//   proxy: true,
-// }));
-
 // configuring body parser
 app.use(bodyParser.json());
 
