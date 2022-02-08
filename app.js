@@ -71,7 +71,7 @@ app.use(bodyParser.json());
 
 // configuring CORS
 const corsOptions = {
-  origin: "*",
+  origin: true,
   credentials: true,
   optionSuccessStatus: 200,
 };
