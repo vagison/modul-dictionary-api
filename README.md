@@ -10,8 +10,9 @@ This English-Armenian / Armenian-English technical dictionary includes more than
 
 ## To run this project:
 1. Clone this repo
-2. Change the `database.js` file with your credentials to connect to the desired database where you have already created `modul-dict` scheme
-3. Import the data into selected scheme from `data` folder of this project
-4. Run `npm install`
-5. Run `npm start`
-
+2. From the root folder of this project remove `app.js` file, rename `app-local.js` file into `app.js`
+3. From `util` folder of this project remove `database.js` file, rename `database-local.js` file into `database.js`
+4. Change the content of `database.js` file according to your credentials in order to connect to the desired database where you have already created `modul-dict` scheme (read project requirements above)
+5. From `data` folder of this project import the tables into `modul-dict` scheme
+6. Run `npm install`
+7. Run `npm start`

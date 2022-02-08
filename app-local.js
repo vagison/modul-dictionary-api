@@ -71,7 +71,7 @@ app.use(bodyParser.json());
 
 // configuring CORS
 const corsOptions = {
-  origin: "https://modul-dictionary.herokuapp.com",
+  origin: "*",
   credentials: true,
   optionSuccessStatus: 200,
 };
@@ -85,8 +85,8 @@ app.use("/", routes);
 // db.sync({ force: true })
 db.sync()
   .then(() => {
-    app.listen(process.env.PORT || 3000);
-    console.log(`App is running at ${process.env.PORT || 3000}!`);
+    app.listen(3000);
+    console.log(`App is running at 3000!`);
   })
   .catch((error) => {
     console.log(error);
