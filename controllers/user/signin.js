@@ -42,7 +42,6 @@ exports.signin = async (req, res, next) => {
 
         // Sending status for successfully logging in
         if (cookies) {
-          console.log(cookies)
           return cookies.send("User logged in succesfully!");
         }
       }

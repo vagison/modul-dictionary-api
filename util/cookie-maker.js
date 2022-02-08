@@ -71,6 +71,7 @@ async function cookieMaker(email, res) {
         httpOnly: true,
         sameSite: "none",
         secure: true,
+        domain: "https://modul-dictionary.herokuapp.com",
         path: "/",
         expires: cookieExpirationDate,
       })
@@ -78,12 +79,14 @@ async function cookieMaker(email, res) {
         httpOnly: true,
         sameSite: "none",
         secure: true,
+        domain: "https://modul-dictionary.herokuapp.com",
         path: "/",
         expires: cookieExpirationDate,
       })
       .cookie("token", tokenCookieValue, {
         sameSite: "none",
         secure: true,
+        domain: "https://modul-dictionary.herokuapp.com",
         path: "/",
         expires: cookieExpirationDate,
       });
