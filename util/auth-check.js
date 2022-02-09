@@ -6,7 +6,7 @@ const Token = require("../models/token");
 
 // --- Setting up authorization handling function
 async function authChecker(req, res, next) {
-  console.log("dasda", req)
+  console.log("dasda", req.cookies)
   async function checking(userCookie, loginCookie, tokenValue) {
     // Throw error if no cookies detected
     if (!userCookie || !loginCookie || !tokenValue) {
