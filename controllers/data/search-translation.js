@@ -307,13 +307,11 @@ exports.searchTranslation = async (req, res, next) => {
         if (response) {
           // Sending successfully found translations and the status code
           return res.status(200).send(response);
-        } 
-        else {
-          // If there was no translation - send status 500 
+        } else {
+          // If there was no translation - send status 500
           return res.status(500).send("Nothing found to sent!");
         }
-      } 
-      catch (error) {
+      } catch (error) {
         // Sending error if the data was still incorrect
         return res.status(500).send("Wrong data to find translations!");
       }
@@ -321,7 +319,7 @@ exports.searchTranslation = async (req, res, next) => {
   } 
   
   catch (error) {
-    // If there was another error - send status 500 
+    // If there was another error - send status 500
     return res.status(500).send("Something else broke!");
   }
 };
