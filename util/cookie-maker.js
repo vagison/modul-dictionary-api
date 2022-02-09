@@ -68,14 +68,14 @@ async function cookieMaker(email, res) {
     return res
       .status(200)
       .cookie("user", email, {
-        httpOnly: false,
+        httpOnly: true,
         sameSite: "none",
         secure: true,
         // path: "/",
         expires: cookieExpirationDate,
       })
       .cookie("login", loginCookieValue, {
-        httpOnly: false,
+        httpOnly: true,
         sameSite: "none",
         secure: true,
         // path: "/",
