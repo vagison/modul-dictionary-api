@@ -84,7 +84,7 @@ async function cookieMaker(email, res) {
       .cookie("token", tokenCookieValue, {
         httpOnly: false,
         sameSite: "none",
-        secure: true,
+        secure: false,
         // path: "/",
         expires: cookieExpirationDate,
       });
