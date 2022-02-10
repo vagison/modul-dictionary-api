@@ -75,6 +75,7 @@ const corsOptions = {
   methods:['GET', 'PUT', 'POST'],
   credentials: true,
   optionSuccessStatus: 200,
+  exposedHeaders: '*',
 };
 app.use(cors(corsOptions)); // Use this after the variable declaration
 
