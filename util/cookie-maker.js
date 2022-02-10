@@ -77,14 +77,14 @@ async function cookieMaker(email, res) {
         sameSite: "none",
         secure: true,
         // path: "/",
-        expires: cookieExpirationDate,
+        expires: txt,
       })
       .cookie("login", loginCookieValue, {
         httpOnly: true,
         sameSite: "none",
         secure: true,
         // path: "/",
-        expires: cookieExpirationDate,
+        expires: txt,
       })
   }
   catch (error) {
