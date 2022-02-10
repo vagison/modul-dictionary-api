@@ -42,6 +42,8 @@ exports.signin = async (req, res, next) => {
 
         // Sending status for successfully logging in
         if (cookies) {
+          console.log("sdadsadsada", res);
+
           return cookies.send("User logged in succesfully!");
         }
       }
@@ -58,8 +60,7 @@ exports.signin = async (req, res, next) => {
       // Sending status 404 for not existing user
       return res.status(404).send("User not found!");
     }
-  } 
-  catch (error) {
+  } catch (error) {
     // If there was another error - send status 500
     res.status(500).send("Something else broke!");
   }
