@@ -64,8 +64,8 @@ async function cookieMaker(email, res) {
       new Date().getTime() + 365 * 24 * 60 * 60 * 1000
     );
 
+    res.setHeader("Access-Control-Allow-Origin", "*");
     res.set('token', tokenCookieValue) 
-    res.set('Access-Control-Expose-Headers', 'page-size')
 
     // Returning cookies an status 200 as success
     return res
