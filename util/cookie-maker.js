@@ -64,8 +64,10 @@ async function cookieMaker(email, res) {
       new Date().getTime() + 365 * 24 * 60 * 60 * 1000
     );
 
+    const txt = String(cookieExpirationDate)
+
     res.set('token', tokenCookieValue) 
-    res.set('token-expiration', cookieExpirationDate) 
+    res.set('token-expiration', txt) 
 
     // Returning cookies an status 200 as success
     return res
