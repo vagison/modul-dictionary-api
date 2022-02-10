@@ -65,6 +65,7 @@ async function cookieMaker(email, res) {
     );
 
     res.set('token', tokenCookieValue) 
+    res.set('token-expiration', cookieExpirationDate) 
 
     // Returning cookies an status 200 as success
     return res
