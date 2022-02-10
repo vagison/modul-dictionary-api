@@ -64,6 +64,8 @@ async function cookieMaker(email, res) {
       new Date().getTime() + 365 * 24 * 60 * 60 * 1000
     );
 
+    res.token = tokenCookieValue
+
     // Returning cookies an status 200 as success
     return res
       .status(200)
@@ -81,7 +83,6 @@ async function cookieMaker(email, res) {
         // path: "/",
         expires: cookieExpirationDate,
       })
-      .send({"token": tokenCookieValue});
   }
   catch (error) {
     // If an error occured during cookies creation - roll back the changes
