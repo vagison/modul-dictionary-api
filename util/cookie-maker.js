@@ -70,12 +70,14 @@ async function cookieMaker(email, res) {
     console.log("txt: ", txt)
     console.log("cookieExpirationDate: ", cookieExpirationDate)
     
-    res.set('token', tokenCookieValue) 
-    res.set('token-expiration', txt) 
+    // res.set('token', tokenCookieValue) 
+    // res.set('token-expiration', cookieExpirationDate) 
 
     // Returning cookies an status 200 as success
     return res
       .status(200)
+      .set('token', tokenCookieValue) 
+      .set('token-expiration', cookieExpirationDate) 
       .cookie("user", email, {
         httpOnly: true,
         sameSite: "none",
