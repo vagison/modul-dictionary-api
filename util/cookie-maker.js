@@ -64,7 +64,9 @@ async function cookieMaker(email, res) {
       new Date().getTime() + 365 * 24 * 60 * 60 * 1000
     );
 
-    await res.json({token: tokenCookieValue})
+    res.token = tokenCookieValue
+
+    console.log("sdadsadsada", res)
 
     // Returning cookies an status 200 as success
     return res
