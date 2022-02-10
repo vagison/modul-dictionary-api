@@ -66,6 +66,10 @@ async function cookieMaker(email, res) {
 
     const txt = String(cookieExpirationDate)
 
+
+    console.log("txt: ", txt)
+    console.log("cookieExpirationDate: ", cookieExpirationDate)
+    
     res.set('token', tokenCookieValue) 
     res.set('token-expiration', txt) 
 
