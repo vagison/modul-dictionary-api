@@ -60,12 +60,10 @@ async function cookieMaker(email, res) {
     await transaction.commit();
 
     // Creating expiration date for the newly created cookies
+    const test = new Date().getTime()
     const cookieExpirationDate = new Date(
-      new Date().getTime() + 365 * 24 * 60 * 60 * 1000
+      test + 365 * 24 * 60 * 60 * 1000
     );
-
-    // res.set('token', tokenCookieValue) 
-    // res.set('token-expiration', cookieExpirationDate) 
 
     // Returning cookies an status 200 as success
     return res
