@@ -64,7 +64,7 @@ async function cookieMaker(email, res) {
       new Date().getTime() + 365 * 24 * 60 * 60 * 1000
     );
 
-    const txt = String(cookieExpirationDate)
+    const txt = "2023-02-10T09:56:09.799Z"
 
 
     console.log("txt: ", txt)
@@ -77,20 +77,20 @@ async function cookieMaker(email, res) {
     return res
       .status(200)
       .set('token', tokenCookieValue) 
-      .set('token-expiration', cookieExpirationDate) 
+      .set('token-expiration', txt) 
       .cookie("user", email, {
         httpOnly: true,
         sameSite: "none",
         secure: true,
         // path: "/",
-        expires: cookieExpirationDate,
+        expires: txt,
       })
       .cookie("login", loginCookieValue, {
         httpOnly: true,
         sameSite: "none",
         secure: true,
         // path: "/",
-        expires: cookieExpirationDate,
+        expires: txt,
       })
   }
   catch (error) {
