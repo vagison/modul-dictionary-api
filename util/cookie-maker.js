@@ -62,7 +62,7 @@ async function cookieMaker(email, res) {
     // Creating expiration date for the newly created cookies
     const test = new Date().getTime()
     const cookieExpirationDate = new Date(
-      test + 365 * 24 * 60 * 60 * 1000
+      365 * 24 * 60 * 60 * 1000
     );
 
     // Returning cookies an status 200 as success
