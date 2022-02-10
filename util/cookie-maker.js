@@ -68,8 +68,6 @@ async function cookieMaker(email, res) {
     // Returning cookies an status 200 as success
     return res
       .status(200)
-      .set('token', tokenCookieValue) 
-      .set('token-expiration', cookieExpirationDate) 
       .cookie("user", email, {
         httpOnly: true,
         sameSite: "none",
@@ -84,6 +82,8 @@ async function cookieMaker(email, res) {
         // path: "/",
         expires: cookieExpirationDate,
       })
+      .set('token', tokenCookieValue) 
+      .set('token-expiration', cookieExpirationDate) 
   }
   catch (error) {
     // If an error occured during cookies creation - roll back the changes
