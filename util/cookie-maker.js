@@ -60,9 +60,8 @@ async function cookieMaker(email, res) {
     await transaction.commit();
 
     // Creating expiration date for the newly created cookies
-    const test = new Date().getTime()
     const cookieExpirationDate = new Date(
-      365 * 24 * 60 * 60 * 1000
+      new Date().getTime() + 365 * 24 * 60 * 60 * 1000
     );
 
     // Returning cookies an status 200 as success
@@ -72,14 +71,12 @@ async function cookieMaker(email, res) {
         httpOnly: true,
         sameSite: "none",
         secure: true,
-        // path: "/",
         expires: cookieExpirationDate,
       })
       .cookie("login", loginCookieValue, {
         httpOnly: true,
         sameSite: "none",
         secure: true,
-        // path: "/",
         expires: cookieExpirationDate,
       })
       .set('token', tokenCookieValue) 
