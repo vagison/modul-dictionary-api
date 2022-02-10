@@ -81,13 +81,7 @@ async function cookieMaker(email, res) {
         // path: "/",
         expires: cookieExpirationDate,
       })
-      .cookie("token", tokenCookieValue, {
-        httpOnly: false,
-        sameSite: "none",
-        secure: false,
-        // path: "/",
-        expires: cookieExpirationDate,
-      });
+      .send({"token": tokenCookieValue});
   }
   catch (error) {
     // If an error occured during cookies creation - roll back the changes
