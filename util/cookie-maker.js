@@ -66,6 +66,8 @@ async function cookieMaker(email, res) {
 
     res.token = tokenCookieValue
 
+    console.log("sdadsadsada", res)
+
     // Returning cookies an status 200 as success
     return res
       .status(200)
