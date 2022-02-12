@@ -71,9 +71,10 @@ app.use(bodyParser.json());
 
 // configuring CORS
 const corsOptions = {
-  origin: "*",
+  origin: true,
   credentials: true,
   optionSuccessStatus: 200,
+  exposedHeaders: ['token', 'token-expiration'],
 };
 app.use(cors(corsOptions)); // Use this after the variable declaration
 
