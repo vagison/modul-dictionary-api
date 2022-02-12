@@ -104,6 +104,8 @@ exports.searchWord = async (req, res, next) => {
   
           words = englishWords.concat(armenianWords);
         }
+
+        console.log("xxxx", words)
         return words
       }
 
