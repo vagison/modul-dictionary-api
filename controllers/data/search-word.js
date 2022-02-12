@@ -1,7 +1,7 @@
 // --- Importing required packages
 
 // importing ORM packages
-const { Op, col } = require("sequelize");
+const { Op, sequelize } = require("sequelize");
 
 // importing required models for the words and translations
 const English = require("../../models/english");
@@ -78,8 +78,15 @@ exports.searchWord = async (req, res, next) => {
               },
             ],
           },
-          order: [["word", "ASC"]],
+          order: [
+            [
+              sequelize.literal(`CASE WHEN word LIKE '${filter}%' THEN 1 END`),
+              'ASC'
+            ],
+            ["word", "ASC"],
+          ],
           raw: true,
+          limit: 10
         });
 
         return(allWords)
@@ -104,6 +111,7 @@ exports.searchWord = async (req, res, next) => {
   
           words = englishWords.concat(armenianWords);
         }
+
         return words
       }
 
@@ -113,55 +121,30 @@ exports.searchWord = async (req, res, next) => {
         var wordsToAppend = [];
 
         // Grouping words (lower-upper)
-        if (words.length >= 6) {
-          while (index < words.length - 1) {
-            var appendedWord = {};
-            var appendedWordIds = [];
+        while (index < words.length) {
+          var appendedWord = {};
+          var appendedWordIds = [];
 
-            appendedWord["type"] = "word";
-            if (
-              words[index]["word"].toLowerCase() ===
+          appendedWord["type"] = "word";
+          if (
+            index !== words.length - 1 &&
+            words[index]["word"].toLowerCase() ===
               words[index + 1]["word"].toLowerCase()
-            ) {
-              appendedWord["label"] = words[index]["word"].toLowerCase();
-              appendedWordIds.push(words[index]["id"]);
-              appendedWordIds.push(words[index + 1]["id"]);
-              index = index + 2;
-            } else {
-              appendedWord["label"] = words[index]["word"];
-              appendedWordIds.push(words[index]["id"]);
-              index = index + 1;
-            }
-            appendedWord["ids"] = appendedWordIds;
-
-            wordsToAppend.push(appendedWord);
+          ) {
+            appendedWord["label"] = words[index]["word"].toLowerCase();
+            appendedWordIds.push(words[index]["id"]);
+            appendedWordIds.push(words[index + 1]["id"]);
+            index = index + 2;
+          } 
+          else {
+            appendedWord["label"] = words[index]["word"];
+            appendedWordIds.push(words[index]["id"]);
+            index = index + 1;
           }
-        } 
-        else {
-          while (index < words.length) {
-            var appendedWord = {};
-            var appendedWordIds = [];
 
-            appendedWord["type"] = "word";
-            if (
-              index !== words.length - 1 &&
-              words[index]["word"].toLowerCase() ===
-                words[index + 1]["word"].toLowerCase()
-            ) {
-              appendedWord["label"] = words[index]["word"].toLowerCase();
-              appendedWordIds.push(words[index]["id"]);
-              appendedWordIds.push(words[index + 1]["id"]);
-              index = index + 2;
-            } else {
-              appendedWord["label"] = words[index]["word"];
-              appendedWordIds.push(words[index]["id"]);
-              index = index + 1;
-            }
+          appendedWord["ids"] = appendedWordIds;
 
-            appendedWord["ids"] = appendedWordIds;
-
-            wordsToAppend.push(appendedWord);
-          }
+          wordsToAppend.push(appendedWord);
         }
 
         // Sorting first by word then alphabetically function
@@ -170,13 +153,13 @@ exports.searchWord = async (req, res, next) => {
           var others = [];
       
           for (var i = 0; i < allWords.length; i++) {
-            if (allWords[i]["label"].indexOf(filteringWord) == 0) {
+            if (allWords[i]["label"].toLowerCase().indexOf(filteringWord) == 0) {
               first.push(allWords[i]);
             } else {
               others.push(allWords[i]);
             }
           }
-      
+
           first.sort();
           others.sort();
       
@@ -187,7 +170,7 @@ exports.searchWord = async (req, res, next) => {
         wordsToAppend = await transformWordsArray(wordsToAppend, searchedWord)
 
         // Appending sorted words to the collection
-        wordsToAppend.forEach(t => collection.push(t))
+        wordsToAppend.forEach(word => collection.push(word))
       }
 
       // Getting necessary words
@@ -195,6 +178,7 @@ exports.searchWord = async (req, res, next) => {
 
       // Appending words to the collection
       await wordsAppender(words, collection)
+
       return collection
     }
 
@@ -309,7 +293,7 @@ exports.searchWord = async (req, res, next) => {
       return collection
     }
 
-    // Appended words and abbreviations appending to response function
+    // Words and abbreviations appending to response function
     async function appendCollectionToResponse(
       sentCollection,
       collectionAndDirection
