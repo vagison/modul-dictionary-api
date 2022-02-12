@@ -93,7 +93,7 @@ exports.searchWord = async (req, res, next) => {
         return(allWords)
       }
 
-      // Words picker function (for the languages)
+      // Necessary words picker function (for the language/languages)
       async function wordsPicker(direction, word) {
         var words = [];
         
@@ -116,7 +116,7 @@ exports.searchWord = async (req, res, next) => {
         return words
       }
 
-      // Words appender function
+      // Necessary words to the collection appender function
       async function wordsAppender(words, collection) {
         // Grouping words (lower-upper) function
         async function groupWords(words) {
@@ -186,12 +186,13 @@ exports.searchWord = async (req, res, next) => {
         await appendWords(sortedWords, collection)
       }
 
-      // Getting necessary words
-      const words = await wordsPicker(direction, searchedWord)
+      // Picking necessary words
+      const necessaryWords = await wordsPicker(direction, searchedWord)
 
-      // Appending words to the collection
-      await wordsAppender(words, collection)
+      // Appending necessary words to the collection
+      await wordsAppender(necessaryWords, collection)
 
+      // Returning updated collection
       return collection
     }
 
@@ -273,22 +274,28 @@ exports.searchWord = async (req, res, next) => {
       async function abbreviationsAppender(searchedWord, direction, collection) {
         // Abbreviations appender for a language function
         async function eachLanguageAbbreviationsAppender(searchedWord, direction, collection) {
+          // Setting corresponding language params
           var languageParams = await languageParamsSetter(direction);
           var charsLanguage = languageParams["charsLanguage"];
           var abbreviationLanguage = languageParams["abbreviationLanguage"];
           var wordLanguage = languageParams["wordLanguage"];
 
+          // Setting appropriate filter
           var filter = await regExpCreator(searchedWord, charsLanguage, skipChars);
 
+          // Picking the abbreviations
           var abbreviations = await abbreviationsPicker(filter, abbreviationLanguage, wordLanguage)
 
+          // Appending picked abbreviations to the collection
           abbreviations.forEach(abbreviation => collection.push(abbreviation))
 
+          // Returning updated collection
           return collection
         }
 
         // If needed to search for one specific language
         if (direction === 0 || direction === 1) {
+
           collection = await eachLanguageAbbreviationsAppender(searchedWord, direction, collection)
         }
 
@@ -302,8 +309,10 @@ exports.searchWord = async (req, res, next) => {
       }
 
       // Appending the abbreviations to the collection
-      collection = await abbreviationsAppender(searchedWord, direction, collection)
-      return collection
+      updatedCollection = await abbreviationsAppender(searchedWord, direction, collection)
+      
+      // Returning updated collection
+      return updatedCollection
     }
 
     // Words and abbreviations appending to response function
