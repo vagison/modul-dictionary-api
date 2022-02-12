@@ -78,13 +78,7 @@ exports.searchWord = async (req, res, next) => {
               },
             ],
           },
-          // order: [["word", "ASC"]],
-          order: [
-            [
-              sequelize.literal(`CASE WHEN word LIKE '${filter}%' THEN 1 ELSE 2 END`),
-              'desc'
-            ],
-          ],
+          order: [["word", "ASC"]],
           raw: true,
         });
 
@@ -110,8 +104,6 @@ exports.searchWord = async (req, res, next) => {
   
           words = englishWords.concat(armenianWords);
         }
-
-        console.log("xxxx", words)
         return words
       }
 
@@ -176,14 +168,11 @@ exports.searchWord = async (req, res, next) => {
         async function transformWordsArray(allWords, filteringWord) {
           var first = [];
           var others = [];
-
-          console.log("Bayand", allWords)
       
           for (var i = 0; i < allWords.length; i++) {
             if (allWords[i]["label"].indexOf(filteringWord) == 0) {
               first.push(allWords[i]);
-            } 
-            else {
+            } else {
               others.push(allWords[i]);
             }
           }
