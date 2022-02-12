@@ -81,7 +81,7 @@ exports.searchWord = async (req, res, next) => {
           },
           order: [
             [
-              sequelize.literal(`CASE WHEN word LIKE '${filter}%' THEN 1 END`),
+              sequelize.literal(`CASE WHEN word LIKE '${filter}%' THEN 1 ELSE 2 END`),
               'ASC'
             ],
             ["word", "ASC"],
