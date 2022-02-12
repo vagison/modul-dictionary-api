@@ -1,7 +1,8 @@
 // --- Importing required packages
 
 // importing ORM packages
-const { Op, sequelize } = require("sequelize");
+const { Op } = require("sequelize");
+const sequelize = require("sequelize")
 
 // importing required models for the words and translations
 const English = require("../../models/english");
