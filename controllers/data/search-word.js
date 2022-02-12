@@ -118,35 +118,39 @@ exports.searchWord = async (req, res, next) => {
 
       // Words appender function
       async function wordsAppender(words, collection) {
-        var index = 0;
-        var wordsToAppend = [];
-
-        // Grouping words (lower-upper)
-        while (index < words.length) {
-          var appendedWord = {};
-          var appendedWordIds = [];
-
-          appendedWord["type"] = "word";
-          if (
-            index !== words.length - 1 &&
-            words[index]["word"].toLowerCase() ===
-              words[index + 1]["word"].toLowerCase()
-          ) {
-            appendedWord["label"] = words[index]["word"].toLowerCase();
-            appendedWordIds.push(words[index]["id"]);
-            appendedWordIds.push(words[index + 1]["id"]);
-            index = index + 2;
-          } 
-          else {
-            appendedWord["label"] = words[index]["word"];
-            appendedWordIds.push(words[index]["id"]);
-            index = index + 1;
+        // Grouping words (lower-upper) function
+        async function groupWords(words) {
+          var index = 0;
+          var wordsToAppend = [];
+  
+          while (index < words.length) {
+            var appendedWord = {};
+            var appendedWordIds = [];
+  
+            appendedWord["type"] = "word";
+            if (
+              index !== words.length - 1 &&
+              words[index]["word"].toLowerCase() ===
+                words[index + 1]["word"].toLowerCase()
+            ) {
+              appendedWord["label"] = words[index]["word"].toLowerCase();
+              appendedWordIds.push(words[index]["id"]);
+              appendedWordIds.push(words[index + 1]["id"]);
+              index = index + 2;
+            } 
+            else {
+              appendedWord["label"] = words[index]["word"];
+              appendedWordIds.push(words[index]["id"]);
+              index = index + 1;
+            }
+  
+            appendedWord["ids"] = appendedWordIds;
+  
+            wordsToAppend.push(appendedWord);
           }
 
-          appendedWord["ids"] = appendedWordIds;
-
-          wordsToAppend.push(appendedWord);
-        }
+          return wordsToAppend
+        }        
 
         // Sorting first by word then alphabetically function
         async function transformWordsArray(allWords, filteringWord) {
@@ -167,11 +171,19 @@ exports.searchWord = async (req, res, next) => {
           return first.concat(others).slice(0, 5);
         };
 
+        // Appending sorted words to the collection function
+        async function appendWords(wordsToAppend, collection) {
+          wordsToAppend.forEach(word => collection.push(word))
+        }
+
+        // Grouping words
+        const groupedWords = await groupWords(words)
+
         // Sorting first by word then alphabetically
-        wordsToAppend = await transformWordsArray(wordsToAppend, searchedWord)
+        const sortedWords = await transformWordsArray(groupedWords, searchedWord)
 
         // Appending sorted words to the collection
-        wordsToAppend.forEach(word => collection.push(word))
+        await appendWords(sortedWords, collection)
       }
 
       // Getting necessary words
