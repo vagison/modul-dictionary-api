@@ -295,7 +295,6 @@ exports.searchWord = async (req, res, next) => {
 
         // If needed to search for one specific language
         if (direction === 0 || direction === 1) {
-
           collection = await eachLanguageAbbreviationsAppender(searchedWord, direction, collection)
         }
 
