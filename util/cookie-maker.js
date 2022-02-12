@@ -60,9 +60,8 @@ async function cookieMaker(email, res) {
     await transaction.commit();
 
     // Creating expiration date for the newly created cookies
-    const cookieExpirationDate = new Date(
-      new Date().getTime() + 365 * 24 * 60 * 60 * 1000
-    );
+    const cookieExpirationDateMiliseconds = new Date().getTime() + 365 * 24 * 60 * 60 * 1000
+    const cookieExpirationDate = new Date(cookieExpirationDateMiliseconds);
 
     // Returning cookies an status 200 as success
     return res
@@ -80,7 +79,7 @@ async function cookieMaker(email, res) {
         expires: cookieExpirationDate,
       })
       .set('token', tokenCookieValue) 
-      .set('token-expiration', cookieExpirationDate) 
+      .set('token-expiration', cookieExpirationDateMiliseconds) 
   }
   catch (error) {
     // If an error occured during cookies creation - roll back the changes
