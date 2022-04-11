@@ -71,7 +71,7 @@ app.use(bodyParser.json());
 
 // configuring CORS
 const corsOptions = {
-  origin: ["https://modul-dictionary.herokuapp.com", "https://modul-dictionary.herokuapp.com"],
+  origin: ["http://modul-dictionary.herokuapp.com", "https://modul-dictionary.herokuapp.com"],
   credentials: true,
   optionSuccessStatus: 200,
   exposedHeaders: ['token', 'token-expiration'],
