@@ -69,47 +69,7 @@ exports.searchTranslation = async (req, res, next) => {
               [Op.or]: [
                 {
                   word: {
-                    [Op.like]: `${word["label"]}`,
-                  },
-                },
-                {
-                  word: {
-                    [Op.like]: `${word["label"]} %`,
-                  },
-                },
-                {
-                  word: {
-                    [Op.like]: `${word["label"]}-%`,
-                  },
-                },
-                {
-                  word: {
-                    [Op.like]: `% ${word["label"]}`,
-                  },
-                },
-                {
-                  word: {
-                    [Op.like]: `%-${word["label"]}`,
-                  },
-                },
-                {
-                  word: {
-                    [Op.like]: `% ${word["label"]} %`,
-                  },
-                },
-                {
-                  word: {
-                    [Op.like]: `%-${word["label"]} %`,
-                  },
-                },
-                {
-                  word: {
-                    [Op.like]: `% ${word["label"]}-%`,
-                  },
-                },
-                {
-                  word: {
-                    [Op.like]: `%-${word["label"]}-%`,
+                    [Op.like]: `%${word["label"]}%`,
                   },
                 },
               ],
@@ -183,7 +143,7 @@ exports.searchTranslation = async (req, res, next) => {
           });
         }
 
-        
+
 
         // Picked translations related definitions selecting function
         async function definitionsPicker(translationsIds) {
@@ -272,7 +232,7 @@ exports.searchTranslation = async (req, res, next) => {
             if (allDefinitions.length !== 0) {
               let definitions = allDefinitions.filter(
                 (definition) =>
-                definition["translationId"] === eachTranslation["translationId"]
+                  definition["translationId"] === eachTranslation["translationId"]
               );
               if (definitions.length !== 0) {
                 definitions.forEach((d) => delete d.translationId);
@@ -337,7 +297,7 @@ exports.searchTranslation = async (req, res, next) => {
         if (response) {
           // Sending successfully found translations and the status code
           return res.status(200).send(response);
-        } 
+        }
         else {
           // If there was no translation - send status 500
           return res.status(500).send("Nothing found to sent!");
@@ -347,8 +307,8 @@ exports.searchTranslation = async (req, res, next) => {
         return res.status(500).send("Wrong data to find translations!");
       }
     }
-  } 
-  
+  }
+
   catch (error) {
     // If there was another error - send status 500
     return res.status(500).send("Something else broke!");
