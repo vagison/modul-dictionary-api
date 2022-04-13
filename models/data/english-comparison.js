@@ -10,7 +10,7 @@ const EnglishComparison = db.define("english_comparison", {
     primaryKey: true,
   },
   comparison: {
-    type: Sequelize.STRING(1000),
+    type: Sequelize.STRING,
     allowNull: false,
   },
 },
