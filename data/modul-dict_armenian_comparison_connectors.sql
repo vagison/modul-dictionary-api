@@ -16,28 +16,32 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `users`
+-- Table structure for table `armenian_comparison_connectors`
 --
 
-DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `armenian_comparison_connectors`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `users` (
-  `email` varchar(255) NOT NULL,
-  `hash` varchar(255) NOT NULL,
-  PRIMARY KEY (`email`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `armenian_comparison_connectors` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `armenianId` int DEFAULT NULL,
+  `armenianComparisonId` int DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `armenianId` (`armenianId`),
+  KEY `armenianComparisonId` (`armenianComparisonId`),
+  CONSTRAINT `armenian_comparison_connectors_ibfk_1` FOREIGN KEY (`armenianId`) REFERENCES `armenians` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `armenian_comparison_connectors_ibfk_2` FOREIGN KEY (`armenianComparisonId`) REFERENCES `armenian_comparisons` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `users`
+-- Dumping data for table `armenian_comparison_connectors`
 --
 
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('email@test.com','$2a$10$uzT/TN9Kqx4x5uK8I/DtzewhxrEbDBv2hU26NcFG.uPtLwjN2TP0K');
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+LOCK TABLES `armenian_comparison_connectors` WRITE;
+/*!40000 ALTER TABLE `armenian_comparison_connectors` DISABLE KEYS */;
+INSERT INTO `armenian_comparison_connectors` VALUES (9,914,29),(10,37,29);
+/*!40000 ALTER TABLE `armenian_comparison_connectors` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

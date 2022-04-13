@@ -30,7 +30,7 @@ CREATE TABLE `examples` (
   PRIMARY KEY (`id`),
   KEY `translationId` (`translationId`),
   CONSTRAINT `examples_ibfk_1` FOREIGN KEY (`translationId`) REFERENCES `translations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=313 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=344 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -39,7 +39,7 @@ CREATE TABLE `examples` (
 
 LOCK TABLES `examples` WRITE;
 /*!40000 ALTER TABLE `examples` DISABLE KEYS */;
-INSERT INTO `examples` VALUES (84,'Force brings life to right','Ուժն է ծնում իրավունք',105),(102,'my computer','իմ համակարգիչ',102),(265,'Citizen of RA.','ՀՀ քաղաքացի։',308),(269,'Beam for the building.','Շինության հեծան:',95),(270,'gravel bed','կոպճային բարձիկ',637),(273,'Timber can be used as a construction material.','Փայտանյութն օգտագործվում է որպես շինանյութ:',98),(275,'The metre is a unit of length in the International System of Units.','Երկարության չափման միավոր է միավորների մետրական և միջազգային համակարգերում:',760),(307,'Annual marathon.','Ամենամյա մարաթոն։',38),(308,'Аnother marathon.','Այլ մարաթոն։',38),(309,'Apple is a fruit.','Խնձորը միրգ է:',90),(310,'Water (chemical formula H2O) is an inorganic, transparent, tasteless, odorless, and nearly colorless chemical substance, which is the main constituent of Earth\'s hydrosphere and the fluids of all known living organisms (in which it acts as a solvent).','Ջուր, անօրգանական միացություն, ջրածնի օքսիդ, քիմիական բանաձևը՝ H2O։ Ջուրը բնության ամենատարածված նյութն է, բնության մեջ հանդիպում է պինդ, հեղուկ, գազային վիճակներում։ Կազմում է կենդանի օրգանիզմների բաղադրության 2/3 մասը։',100),(311,'dummy data','',93),(312,'dummy data','',758);
+INSERT INTO `examples` VALUES (102,'my computer','իմ համակարգիչ',102),(265,'Citizen of RA.','ՀՀ քաղաքացի։',308),(269,'Beam for the building.','Շինության հեծան:',95),(270,'gravel bed','կոպճային բարձիկ',637),(273,'Timber can be used as a construction material.','Փայտանյութն օգտագործվում է որպես շինանյութ:',98),(307,'Annual marathon.','Ամենամյա մարաթոն։',38),(308,'Аnother marathon.','Այլ մարաթոն։',38),(309,'Apple is a fruit.','Խնձորը միրգ է:',90),(312,'dummy data','',758),(333,'I\'m not a Ucom subscriber','Ես չեմ օգտվում յուքոմից',59),(334,'Couple example 1.','Զույգի օրինակ 1։',112),(335,'Couple example 1.','Զույգի օրինակ 2։',112),(342,'dummy data','',93),(343,'I enjoy drinking water.','Ես սիրում եմ ջուր խմել։',100);
 /*!40000 ALTER TABLE `examples` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-02-03 11:50:50
+-- Dump completed on 2022-04-13 20:33:10

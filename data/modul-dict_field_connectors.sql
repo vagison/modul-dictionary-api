@@ -31,7 +31,7 @@ CREATE TABLE `field_connectors` (
   KEY `translationId` (`translationId`),
   CONSTRAINT `field_connectors_ibfk_1` FOREIGN KEY (`fieldId`) REFERENCES `fields` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `field_connectors_ibfk_2` FOREIGN KEY (`translationId`) REFERENCES `translations` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=638 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=640 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +40,7 @@ CREATE TABLE `field_connectors` (
 
 LOCK TABLES `field_connectors` WRITE;
 /*!40000 ALTER TABLE `field_connectors` DISABLE KEYS */;
-INSERT INTO `field_connectors` VALUES (1,1,29),(159,1,105),(184,2,107),(200,1,102),(559,1,36),(576,1,309),(577,3,309),(578,2,318),(583,1,95),(592,2,98),(593,1,98),(602,1,97),(603,3,97),(608,3,99),(609,2,99),(613,1,38),(637,1,86);
+INSERT INTO `field_connectors` VALUES (184,2,107),(200,1,102),(576,1,309),(577,3,309),(578,2,318),(583,1,95),(592,2,98),(593,1,98),(602,1,97),(603,3,97),(608,3,99),(609,2,99),(613,1,38),(637,1,86),(638,1,105);
 /*!40000 ALTER TABLE `field_connectors` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2022-02-03 11:50:49
+-- Dump completed on 2022-04-13 20:33:11

@@ -16,28 +16,27 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `users`
+-- Table structure for table `armenian_comparisons`
 --
 
-DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `armenian_comparisons`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `users` (
-  `email` varchar(255) NOT NULL,
-  `hash` varchar(255) NOT NULL,
-  PRIMARY KEY (`email`),
-  UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+CREATE TABLE `armenian_comparisons` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `comparison` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `users`
+-- Dumping data for table `armenian_comparisons`
 --
 
-LOCK TABLES `users` WRITE;
-/*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES ('email@test.com','$2a$10$uzT/TN9Kqx4x5uK8I/DtzewhxrEbDBv2hU26NcFG.uPtLwjN2TP0K');
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+LOCK TABLES `armenian_comparisons` WRITE;
+/*!40000 ALTER TABLE `armenian_comparisons` DISABLE KEYS */;
+INSERT INTO `armenian_comparisons` VALUES (29,'Կրակը վառում են, բռնել չի լինի․․․');
+/*!40000 ALTER TABLE `armenian_comparisons` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
