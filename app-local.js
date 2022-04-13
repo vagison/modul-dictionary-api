@@ -9,20 +9,31 @@ const cors = require("cors");
 const db = require("./util/database");
 
 // user related models import
-const User = require("./models/user");
-const Login = require("./models/login");
-const Token = require("./models/token");
+const User = require("./models/user/user");
+const Login = require("./models/user/login");
+const Token = require("./models/user/token");
 
 // translation related models import
-const English = require("./models/english");
-const Armenian = require("./models/armenian");
-const Translation = require("./models/translation");
-const PartOfSpeech = require("./models/pos");
-const Example = require("./models/example");
-const FieldConnector = require("./models/field-connector");
-const Field = require("./models/field");
+const English = require("./models/data/english");
+const Armenian = require("./models/data/armenian");
 
-// models relationships setting
+const Translation = require("./models/data/translation");
+
+const PartOfSpeech = require("./models/data/pos");
+
+const Definition = require("./models/data/definition");
+const Example = require("./models/data/example");
+
+const FieldConnector = require("./models/data/field-connector");
+const Field = require("./models/data/field");
+
+const ArmenianComparisonConnector = require("./models/data/armenian-comparison-connector");
+const ArmenianComparison = require("./models/data/armenian-comparison");
+
+const EnglishComparisonConnector = require("./models/data/english-comparison-connector");
+const EnglishComparison = require("./models/data/english-comparison");
+
+// models relations setting
 Translation.belongsTo(English);
 English.hasMany(Translation);
 English.belongsToMany(Armenian, {
@@ -35,6 +46,48 @@ Armenian.belongsToMany(English, {
   through: { model: Translation, unique: false },
 });
 
+//
+EnglishComparisonConnector.belongsTo(English);
+English.hasMany(EnglishComparisonConnector, {
+  onDelete: "CASCADE",
+  foreignKey: { allowNull: false },
+  hooks: true,
+});
+English.belongsToMany(EnglishComparison, {
+  through: { model: EnglishComparisonConnector, unique: false },
+});
+
+EnglishComparisonConnector.belongsTo(EnglishComparison);
+EnglishComparison.hasMany(EnglishComparisonConnector, {
+  onDelete: "CASCADE",
+  foreignKey: { allowNull: false },
+  hooks: true,
+});
+EnglishComparison.belongsToMany(English, {
+  through: { model: EnglishComparisonConnector, unique: false },
+});
+
+ArmenianComparisonConnector.belongsTo(Armenian);
+Armenian.hasMany(ArmenianComparisonConnector, {
+  onDelete: "CASCADE",
+  foreignKey: { allowNull: false },
+  hooks: true,
+});
+Armenian.belongsToMany(ArmenianComparison, {
+  through: { model: ArmenianComparisonConnector, unique: false },
+});
+
+ArmenianComparisonConnector.belongsTo(ArmenianComparison);
+ArmenianComparison.hasMany(ArmenianComparisonConnector, {
+  onDelete: "CASCADE",
+  foreignKey: { allowNull: false },
+  hooks: true,
+});
+ArmenianComparison.belongsToMany(Armenian, {
+  through: { model: ArmenianComparisonConnector, unique: false },
+});
+// 
+
 Translation.belongsTo(PartOfSpeech);
 PartOfSpeech.hasMany(Translation);
 
@@ -44,6 +97,13 @@ Translation.hasMany(Example, {
   hooks: true,
 });
 Example.belongsTo(Translation);
+
+Translation.hasMany(Definition, {
+  onDelete: "CASCADE",
+  foreignKey: { allowNull: false },
+  hooks: true,
+});
+Definition.belongsTo(Translation);
 
 Field.hasMany(FieldConnector, {
   onDelete: "CASCADE",
@@ -58,6 +118,7 @@ Translation.hasMany(FieldConnector, {
   hooks: true,
 });
 FieldConnector.belongsTo(Translation);
+
 
 // --- Creating server and configuring middlewares
 // creating server

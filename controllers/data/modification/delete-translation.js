@@ -1,11 +1,12 @@
 // --- Importing required packages
 
 // importing the database and the translations model
-const db = require("../../util/database");
-const Translation = require("../../models/translation");
+const db = require("../../../util/database");
+const Translation = require("../../../models/data/translation");
 
 // importing unused words deleting function
-const deleteUnusedWords = require("../../util/delete-unused-words");
+const deleteUnusedWords = require("../../../util/delete-unused-words");
+const deleteUnusedComparisons = require("../../../util/delete-unused-comparisons");
 
 // --- Setting up and exporting translation deleting function
 exports.deleteTranslation = async (req, res, next) => {
@@ -42,20 +43,23 @@ exports.deleteTranslation = async (req, res, next) => {
             transaction
           );
 
+          // Unused comparisons handling
+          await deleteUnusedComparisons(transaction);
+
           // Commiting changes
           await transaction.commit();
 
           // Sending status for successfully deleted translation
           return res.status(200).send("Translation deleted!");
-        } 
-        catch {
+        }
+        catch(err) {
+          console.log("err", err);
           // If an error occured during the translation deletion - roll back the changes
           await transaction.rollback();
-
           // Throw an error for unsuccessfull deletion
           throw "Something went wrong during transaction!";
         }
-      } 
+      }
       // If translation not found
       else {
         // Throw an error as translation not found
@@ -68,8 +72,8 @@ exports.deleteTranslation = async (req, res, next) => {
       // Throw an error as there was a wrong data to find a translation
       throw "Wrong translation data selected!";
     }
-  } 
-  catch (error) {    
+  }
+  catch (error) {
     // If there was an error during finding a translation or it's deletion - send status 500 and the error
     if (
       error === "No translation found!" ||

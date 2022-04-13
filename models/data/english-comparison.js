@@ -1,19 +1,15 @@
 const { Sequelize } = require("sequelize");
 
-const db = require("../util/database");
+const db = require("../../util/database");
 
-const Example = db.define("example", {
+const EnglishComparison = db.define("english_comparison", {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     allowNull: false,
     primaryKey: true,
   },
-  englishExample: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
-  armenianExample: {
+  comparison: {
     type: Sequelize.STRING,
     allowNull: false,
   },
@@ -22,4 +18,4 @@ const Example = db.define("example", {
   timestamps: false,
 });
 
-module.exports = Example;
+module.exports = EnglishComparison;

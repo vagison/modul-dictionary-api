@@ -4,7 +4,7 @@
 const { Op } = require("sequelize");
 
 // importing fields model
-const Field = require("../../models/field");
+const Field = require("../../../models/data/field");
 
 // --- Setting up and exporting field searching function
 exports.searchField = async (req, res, next) => {

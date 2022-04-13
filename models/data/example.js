@@ -1,15 +1,19 @@
 const { Sequelize } = require("sequelize");
 
-const db = require("../util/database");
+const db = require("../../util/database");
 
-const Field = db.define("field", {
+const Example = db.define("example", {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     allowNull: false,
     primaryKey: true,
   },
-  field: {
+  englishExample: {
+    type: Sequelize.STRING,
+    allowNull: false,
+  },
+  armenianExample: {
     type: Sequelize.STRING,
     allowNull: false,
   },
@@ -18,4 +22,4 @@ const Field = db.define("field", {
   timestamps: false,
 });
 
-module.exports = Field;
+module.exports = Example;

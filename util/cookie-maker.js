@@ -10,8 +10,8 @@ const cookieDestroyer = require("./cookie-destroyer");
 const db = require("./database");
 
 // importing cookies models
-const Login = require("../models/login");
-const Token = require("../models/token");
+const Login = require("../models/user/login");
+const Token = require("../models/user/token");
 
 // --- Setting up cookieMaker function
 async function cookieMaker(email, res) {

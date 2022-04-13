@@ -1,21 +1,17 @@
 const { Sequelize } = require("sequelize");
 
-const db = require("../util/database");
+const db = require("../../util/database");
 
-const Armenian = db.define("armenian", {
+const ArmenianComparisonConnector = db.define("armenian_comparison_connector", {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
     allowNull: false,
     primaryKey: true,
-  },
-  word: {
-    type: Sequelize.STRING,
-    allowNull: false,
-  },
+  }
 },
 {
   timestamps: false,
 });
 
-module.exports = Armenian;
+module.exports = ArmenianComparisonConnector;

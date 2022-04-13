@@ -1,17 +1,17 @@
 const { Sequelize } = require("sequelize");
 
-const db = require("../util/database");
+const db = require("../../util/database");
 
-const Login = db.define(
-  "login",
+const User = db.define(
+  "user",
   {
-    user: {
+    email: {
       type: Sequelize.STRING,
       unique: true,
       allowNull: false,
       primaryKey: true,
     },
-    value: {
+    hash: {
       type: Sequelize.STRING,
       unique: false,
       allowNull: false,
@@ -22,4 +22,4 @@ const Login = db.define(
   }
 );
 
-module.exports = Login;
+module.exports = User;

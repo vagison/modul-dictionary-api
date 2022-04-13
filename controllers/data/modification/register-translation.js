@@ -2,30 +2,24 @@
 
 // importing ORM packages
 const sequelize = require("sequelize");
-const { Op } = require("sequelize");
 
 // importing the database and the required models for the words and translations
-const db = require("../../util/database");
-const English = require("../../models/english");
-const Armenian = require("../../models/armenian");
-const Translation = require("../../models/translation");
-const Example = require("../../models/example");
-const FieldConnector = require("../../models/field-connector");
+const db = require("../../../util/database");
+const English = require("../../../models/data/english");
+const Armenian = require("../../../models/data/armenian");
+const Translation = require("../../../models/data/translation");
+const Example = require("../../../models/data/example");
+const Definition = require("../../../models/data/definition");
+const FieldConnector = require("../../../models/data/field-connector");
 
 // importing RegExp constrains
-const { armChars, engChars, numChars } = require("../../util/regexp");
+const { armChars, engChars, numChars } = require("../../../util/regexp");
 
-// importing unused words deleting function
-const deleteUnusedWords = require("../../util/delete-unused-words");
-
-// --- Setting up translation's updating function
-exports.updateTranslation = async (req, res, next) => {
+// --- Setting up and exporting translation's registration function
+exports.registerTranslation = async (req, res, next) => {
   try {
     // Getting the input from the request
-    const {
-      translationId,
-      oldEnglishWordId,
-      oldArmenianWordId,
+    let {
       englishWord,
       armenianWord,
       pos,
@@ -36,13 +30,11 @@ exports.updateTranslation = async (req, res, next) => {
       abbreviationArm,
       fields,
       examples,
+      definitions,
     } = req.body;
 
     // User wrong input handling, including wrong values (as possible) and datatypes
     {
-      if (!translationId || typeof translationId !== "number") {
-        return res.status(500).send("Wrong data sent!");
-      }
       if (
         englishWord.length === 0 ||
         !(engChars.test(englishWord[0]) || numChars.test(englishWord[0]))
@@ -89,6 +81,7 @@ exports.updateTranslation = async (req, res, next) => {
       }
     }
 
+    // Registering translation
     // Establishing transaction
     const transaction = await db.transaction();
     try {
@@ -97,7 +90,7 @@ exports.updateTranslation = async (req, res, next) => {
         where: {
           word: sequelize.where(
             sequelize.literal("BINARY word ="),
-            `'${englishWord}'`,
+            `"${englishWord}"`,
             sequelize.literal("")
           ),
         },
@@ -124,57 +117,36 @@ exports.updateTranslation = async (req, res, next) => {
       });
       const armenianWordId = armenianWordRetrieved.id;
 
-      // Searching for another translation with same english, armenian words and part of speech
-      const existingTranslation = await Translation.findOne({
-        where: {
-          englishId: englishWordId,
-          armenianId: armenianWordId,
-          posId: pos ? pos : 1,
-        },
-        raw: true,
-      });
+      // Registering translation
+      const [translationRetrieved, crTranslation] =
+        await Translation.findOrCreate({
+          where: {
+            englishId: englishWordId,
+            armenianId: armenianWordId,
+            posId: pos ? pos : 1,
+          },
+          defaults: {
+            englishId: englishWordId,
+            armenianId: armenianWordId,
+            posId: pos ? pos : 1,
+            qualityEngArm: !qualityEngArm ? 10 : qualityEngArm,
+            qualityArmEng: !qualityArmEng ? 10 : qualityArmEng,
+            pronunciation: pronunciation ? pronunciation : null,
+            abbreviationEng: abbreviationEng ? abbreviationEng : null,
+            abbreviationArm: abbreviationArm ? abbreviationArm : null,
+          },
+          transaction: transaction,
+        });
+      const translationId = translationRetrieved.id;
 
-      // If the translation exists and not the current one - throw an error!
-      if (
-        existingTranslation !== null &&
-        existingTranslation["id"] !== translationId
-      ) {
+      // Throwing an error for already existing translation
+      if (!crTranslation) {
         throw "Translation already exists!";
       }
 
-      // Updating the translation
-      await Translation.update(
-        // Values to update
-        {
-          englishId: englishWordId,
-          armenianId: armenianWordId,
-          posId: pos ? pos : 1,
-          qualityEngArm: !qualityEngArm ? 10 : qualityEngArm,
-          qualityArmEng: !qualityArmEng ? 10 : qualityArmEng,
-          pronunciation: pronunciation ? pronunciation : null,
-          abbreviationEng: abbreviationEng ? abbreviationEng : null,
-          abbreviationArm: abbreviationArm ? abbreviationArm : null,
-        },
-        {
-          // Clause
-          where: {
-            id: translationId,
-          },
-          // Transaction
-          transaction: transaction,
-        }
-      );
-
-      // Updating field connectors for the updated translation
+      // Registering field connectors for the newely created translation
       if (fields) {
         try {
-          await FieldConnector.destroy({
-            where: {
-              translationId: { [Op.like]: translationId },
-            },
-            transaction: transaction,
-          });
-
           await Promise.all(
             fields.map(async (field) => {
               await FieldConnector.findOrCreate({
@@ -195,16 +167,9 @@ exports.updateTranslation = async (req, res, next) => {
         }
       }
 
-      // Updating examples for the updated translation
+      // Registering examples for the newely created translation
       if (examples) {
         try {
-          await Example.destroy({
-            where: {
-              translationId: { [Op.like]: translationId },
-            },
-            transaction: transaction,
-          });
-
           await Promise.all(
             examples.map(async (example) => {
               if (
@@ -232,22 +197,45 @@ exports.updateTranslation = async (req, res, next) => {
         }
       }
 
-      // Unused words handling
-      await deleteUnusedWords(
-        translationId,
-        englishWordId === oldEnglishWordId ? null : oldEnglishWordId,
-        armenianWordId === oldArmenianWordId ? null : oldArmenianWordId,
-        transaction
-      );
+      // Registering definitions for the newely created translation
+      if (definitions) {
+        try {
+          await Promise.all(
+            definitions.map(async (definition) => {
+              if (
+                definition["englishDefinition"].length !== 0 ||
+                definition["armenianDefinition"].length !== 0
+              ) {
+                await Definition.findOrCreate({
+                  where: {
+                    englishDefinition: definition["englishDefinition"],
+                    armenianDefinition: definition["armenianDefinition"],
+                    translationId: translationId,
+                  },
+                  defaults: {
+                    englishDefinition: definition["englishDefinition"],
+                    armenianDefinition: definition["armenianDefinition"],
+                    translationId: translationId,
+                  },
+                  transaction: transaction,
+                });
+              }
+            })
+          );
+        }
+        catch (error) {
+          throw "Wrong definitions!";
+        }
+      }
 
-      // Commiting changes
+      // Commiting the translation
       await transaction.commit();
 
       // Sending status for successfully registered translation
-      return res.status(200).send("Translation updated succesfully!");
-    } 
+      return res.status(200).send("Translation registered succesfully!");
+    }
     catch (error) {
-      // If an error occured during the translation updation - roll back the changes
+      // If an error occured during the translation registraion - roll back the changes
       await transaction.rollback();
       // If the translation already existed - send status 304 and the error
       if (error === "Translation already exists!") {
@@ -258,7 +246,7 @@ exports.updateTranslation = async (req, res, next) => {
         return res.status(500).send("Wrong data sent!");
       }
     }
-  } 
+  }
   catch (error) {
     // If there was another error - send status 500
     res.status(500).send("Something else broke!");

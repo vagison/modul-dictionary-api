@@ -1,8 +1,8 @@
 // --- Importing required packages
 
 // importing cookies models
-const Login = require("../models/login");
-const Token = require("../models/token");
+const Login = require("../models/user/login");
+const Token = require("../models/user/token");
 
 // --- Setting up authorization handling function
 async function authChecker(req, res, next) {

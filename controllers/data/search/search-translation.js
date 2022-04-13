@@ -4,13 +4,14 @@
 const { Op } = require("sequelize");
 
 // importing required models for the words and translations
-const English = require("../../models/english");
-const Armenian = require("../../models/armenian");
-const Translation = require("../../models/translation");
-const PartOfSpeech = require("../../models/pos");
-const Example = require("../../models/example");
-const Field = require("../../models/field");
-const FieldConnector = require("../../models/field-connector");
+const English = require("../../../models/data/english");
+const Armenian = require("../../../models/data/armenian");
+const Translation = require("../../../models/data/translation");
+const PartOfSpeech = require("../../../models/data/pos");
+const Example = require("../../../models/data/example");
+const Definition = require("../../../models/data/definition");
+const Field = require("../../../models/data/field");
+const FieldConnector = require("../../../models/data/field-connector");
 
 // --- Setting up and exporting translation's searching function
 exports.searchTranslation = async (req, res, next) => {
@@ -28,7 +29,7 @@ exports.searchTranslation = async (req, res, next) => {
       try {
         // Language parameters setter function
         async function languageParamsSetter(direction) {
-          var params = {};
+          let params = {};
 
           if (direction === 0) {
             params = {
@@ -56,7 +57,7 @@ exports.searchTranslation = async (req, res, next) => {
 
         // Searching parameters setter function
         async function searchingCriteriasSetter(word) {
-          var params = {};
+          let params = {};
           if (word["type"] === "abbreviation") {
             params = {
               id: { [Op.in]: word["value"] },
@@ -143,8 +144,8 @@ exports.searchTranslation = async (req, res, next) => {
         // Picked translations processing function
         async function translationsProcesser(allTranslations) {
           // stringyfing allTranslations and making back JSON
-          var jsonString = JSON.stringify(allTranslations);
-          var obj = JSON.parse(jsonString);
+          let jsonString = JSON.stringify(allTranslations);
+          let obj = JSON.parse(jsonString);
           return obj;
         }
 
@@ -182,18 +183,32 @@ exports.searchTranslation = async (req, res, next) => {
           });
         }
 
+        
+
+        // Picked translations related definitions selecting function
+        async function definitionsPicker(translationsIds) {
+          return await Definition.findAll({
+            where: {
+              translationId: { [Op.in]: translationsIds },
+            },
+            attributes: ["translationId", "englishDefinition", "armenianDefinition"],
+            raw: true,
+          });
+        }
+
         // Response object maker function
         async function responseMaker(
           processedTranslations,
           allFields,
           allExamples,
+          allDefinitions,
           word
         ) {
-          var translations = [];
-          var type = word["type"];
+          let translations = [];
+          let type = word["type"];
 
           processedTranslations.forEach((item) => {
-            var eachTranslation = {};
+            let eachTranslation = {};
             eachTranslation["translationId"] = item["translations.id"];
             eachTranslation["englishWordId"] = item[englishWordId];
             eachTranslation["armenianWordId"] = item[armenianWordId];
@@ -224,16 +239,16 @@ exports.searchTranslation = async (req, res, next) => {
             }
 
             if (allFields.length !== 0) {
-              var fields = allFields.filter(
+              let fields = allFields.filter(
                 (field) =>
                   field["translationId"] === eachTranslation["translationId"]
               );
 
               if (fields.length !== 0) {
-                var sentFields = [];
+                let sentFields = [];
 
                 fields.forEach((field) => {
-                  var eachField = {};
+                  let eachField = {};
                   eachField["label"] = field["field.field"];
                   eachField["value"] = field["field.id"];
                   sentFields.push(eachField);
@@ -244,7 +259,7 @@ exports.searchTranslation = async (req, res, next) => {
             }
 
             if (allExamples.length !== 0) {
-              var examples = allExamples.filter(
+              let examples = allExamples.filter(
                 (example) =>
                   example["translationId"] === eachTranslation["translationId"]
               );
@@ -254,10 +269,21 @@ exports.searchTranslation = async (req, res, next) => {
               }
             }
 
+            if (allDefinitions.length !== 0) {
+              let definitions = allDefinitions.filter(
+                (definition) =>
+                definition["translationId"] === eachTranslation["translationId"]
+              );
+              if (definitions.length !== 0) {
+                definitions.forEach((d) => delete d.translationId);
+                eachTranslation["definitions"] = definitions;
+              }
+            }
+
             translations.push(eachTranslation);
           });
 
-          var response = {};
+          let response = {};
           response["translations"] = translations;
           response["type"] = type;
 
@@ -295,11 +321,15 @@ exports.searchTranslation = async (req, res, next) => {
         // Picking related examples for the translations
         const allExamples = await examplesPicker(translationsIds);
 
+        // Picking related definitions for the translations
+        const allDefinitions = await definitionsPicker(translationsIds);
+
         // Making the response object
         const response = await responseMaker(
           processedTranslations,
           allFields,
           allExamples,
+          allDefinitions,
           selectedWord
         );
 
@@ -307,7 +337,8 @@ exports.searchTranslation = async (req, res, next) => {
         if (response) {
           // Sending successfully found translations and the status code
           return res.status(200).send(response);
-        } else {
+        } 
+        else {
           // If there was no translation - send status 500
           return res.status(500).send("Nothing found to sent!");
         }

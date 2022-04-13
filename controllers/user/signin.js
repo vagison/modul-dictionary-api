@@ -4,7 +4,7 @@
 const bcrypt = require("bcryptjs");
 
 // importing Users model
-const User = require("../../models/user");
+const User = require("../../models/user/user");
 
 // importing email RegExp
 const { emailRegex } = require("../../util/regexp");

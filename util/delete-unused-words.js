@@ -4,9 +4,9 @@
 const sequelize = require("sequelize");
 
 // importing required models for the words and translations
-const English = require("../models/english");
-const Armenian = require("../models/armenian");
-const Translation = require("../models/translation");
+const English = require("../models/data/english");
+const Armenian = require("../models/data/armenian");
+const Translation = require("../models/data/translation");
 
 // --- Setting up unused words deleting function
 async function deleteUnusedWords(
@@ -34,32 +34,32 @@ async function deleteUnusedWords(
 
   // Searching with armenianID to check if there is another translation, using the word
   const armenianWordsUsage = await wordUsage("armenianId", armenianWordId);
-  
+
   // Searching english word in Englishes table, in case there was a change
   const englishWordToDelete =
     englishWordId !== null
       ? await English.findOne({
-          where: {
-            id: englishWordId,
-          },
-        })
+        where: {
+          id: englishWordId,
+        },
+      })
       : "";
-  
+
   // Searching armenian word in Armenians table, in case there was a change
   const armenianWordToDelete =
     armenianWordId !== null
       ? await Armenian.findOne({
-          where: {
-            id: armenianWordId,
-          },
-        })
+        where: {
+          id: armenianWordId,
+        },
+      })
       : "";
 
   // If english word is not used anymore in any other translation - destroy the word!
   englishWordsUsage === null
     ? await englishWordToDelete.destroy({ transaction: transaction })
     : console.log("English word is used");
-  
+
   // If armenian word is not used anymore in any other translation - destroy the word!
   armenianWordsUsage === null
     ? await armenianWordToDelete.destroy({ transaction: transaction })

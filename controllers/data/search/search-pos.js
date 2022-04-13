@@ -4,7 +4,7 @@
 const { Op } = require("sequelize");
 
 // importing required models for the words and translations
-const PartOfSpeech = require("../../models/pos");
+const PartOfSpeech = require("../../../models/data/pos");
 
 // --- Setting up and exporting POS searching function
 exports.searchPOS = async (req, res, next) => {

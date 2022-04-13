@@ -1,8 +1,8 @@
 const { Sequelize } = require("sequelize");
 
-const db = require("../util/database");
+const db = require("../../util/database");
 
-const FieldConnector = db.define("field_connector", {
+const EnglishComparisonConnector = db.define("english_comparison_connector", {
   id: {
     type: Sequelize.INTEGER,
     autoIncrement: true,
@@ -14,4 +14,4 @@ const FieldConnector = db.define("field_connector", {
   timestamps: false,
 });
 
-module.exports = FieldConnector;
+module.exports = EnglishComparisonConnector;
