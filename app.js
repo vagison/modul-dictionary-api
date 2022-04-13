@@ -144,12 +144,12 @@ const routes = require("./routes/routes");
 app.use("/", routes);
 
 // --- Syncing models with the database and listening the server
-// db.sync({ force: true })
-db.sync()
-  .then(() => {
-    app.listen(process.env.PORT || 3000);
-    console.log(`App is running at ${process.env.PORT || 3000}!`);
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+db.sync({ force: true })
+// db.sync()
+//   .then(() => {
+//     app.listen(process.env.PORT || 3000);
+//     console.log(`App is running at ${process.env.PORT || 3000}!`);
+//   })
+//   .catch((error) => {
+//     console.log(error);
+//   });

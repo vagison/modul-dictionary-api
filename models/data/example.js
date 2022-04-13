@@ -10,11 +10,11 @@ const Example = db.define("example", {
     primaryKey: true,
   },
   englishExample: {
-    type: Sequelize.STRING,
+    type: Sequelize.STRING(1000),
     allowNull: false,
   },
   armenianExample: {
-    type: Sequelize.STRING,
+    type: Sequelize.STRING(1000),
     allowNull: false,
   },
 },

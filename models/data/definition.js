@@ -10,11 +10,11 @@ const Definition = db.define("definition", {
     primaryKey: true,
   },
   englishDefinition: {
-    type: Sequelize.STRING,
+    type: Sequelize.STRING(1000),
     allowNull: false,
   },
   armenianDefinition: {
-    type: Sequelize.STRING,
+    type: Sequelize.STRING(1000),
     allowNull: false,
   },
 },

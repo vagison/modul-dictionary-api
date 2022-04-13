@@ -10,7 +10,7 @@ const ArmenianComparison = db.define("armenian_comparison", {
     primaryKey: true,
   },
   comparison: {
-    type: Sequelize.STRING,
+    type: Sequelize.STRING(1000),
     allowNull: false,
   },
 },
