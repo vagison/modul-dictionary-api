@@ -1,5 +1,5 @@
 # Modul Technical Dictionary API
-Final project for the API of Modul Technical Dictionary (English-Armenian / Armenian-English technical dictionary)
+Final API project for the Modul Technical Dictionary (English-Armenian / Armenian-English technical dictionary)
 
 ## About the project
 This English-Armenian / Armenian-English technical dictionary includes more than 5000 entries (including: words, phrases and abbreviations) that are widely used in various technical fields.
