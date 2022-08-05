@@ -298,6 +298,8 @@ exports.searchTranslation = async (req, res, next) => {
           return response;
         }
 
+        // Starting the process
+
         // Defining language parameters
         const {
           languageTableFrom,
