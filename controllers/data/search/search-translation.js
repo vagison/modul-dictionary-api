@@ -83,8 +83,6 @@ exports.searchTranslation = async (req, res, next) => {
             // filtering the array from duplications
             allWordsOfThePhrase = [...new Set(allWordsOfThePhrase)];
 
-            console.log("sdfds", allWordsOfThePhrase);
-
             // cleaning the array from the exceptions, saving into another array and then rewriting the back
             let tmp = [];
             for (let i = 0; i < allWordsOfThePhrase.length; i++) {
