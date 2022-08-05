@@ -65,9 +65,9 @@ exports.searchTranslation = async (req, res, next) => {
 
         // Searching parameters setter function
         async function searchingCriteriasSetter(word) {
-          let params = {};
+          let finalCriteria = {};
           if (word["type"] === "abbreviation") {
-            params = {
+            finalCriteria = {
               id: { [Op.in]: word["value"] },
             };
           }
@@ -84,41 +84,43 @@ exports.searchTranslation = async (req, res, next) => {
             // cleaning the array from the exceptions, saving into another array and then rewriting the back
             let tmp = [];
             for (let i = 0; i < allWordsOfThePhrase.length; i++) {
-              if (!exceptionsList.includes(allWordsOfThePhrase[i].toLowerCase())) {
+              if (
+                !exceptionsList.includes(allWordsOfThePhrase[i].toLowerCase())
+              ) {
                 tmp.push(allWordsOfThePhrase[i]);
               }
             }
             allWordsOfThePhrase = tmp;
 
             // creating a criteria for querying the words
-            let allPossibleOptions = [];
+            let allCriterias = [];
             for (i = 0; i < allWordsOfThePhrase.length; i++) {
-              allPossibleOptions.push({
+              allCriterias.push({
                 word: {
                   [Op.like]: `${allWordsOfThePhrase[i]}%`,
                 },
               });
-              allPossibleOptions.push({
+              allCriterias.push({
                 word: {
                   [Op.like]: `% ${allWordsOfThePhrase[i]}%`,
                 },
               });
-              allPossibleOptions.push({
+              allCriterias.push({
                 word: {
                   [Op.like]: `%-${allWordsOfThePhrase[i]}%`,
                 },
               });
-              allPossibleOptions.push({
+              allCriterias.push({
                 word: {
                   [Op.like]: `%/${allWordsOfThePhrase[i]}%`,
                 },
               });
             }
-            params = {
-              [Op.or]: allPossibleOptions,
+            finalCriteria = {
+              [Op.or]: allCriterias,
             };
           }
-          return params;
+          return finalCriteria;
         }
 
         // Translations picker function

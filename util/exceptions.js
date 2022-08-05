@@ -8,6 +8,7 @@ module.exports = {
     "the",
     "and",
     "or",
+    "not",
     "whether",
     "about",
     "above",
