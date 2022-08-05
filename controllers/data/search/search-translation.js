@@ -84,7 +84,7 @@ exports.searchTranslation = async (req, res, next) => {
             // cleaning the array from the exceptions, saving into another array and then rewriting the back
             let tmp = [];
             for (let i = 0; i < allWordsOfThePhrase.length; i++) {
-              if (!exceptionsList.includes(allWordsOfThePhrase[i])) {
+              if (!exceptionsList.includes(allWordsOfThePhrase[i].toLowerCase())) {
                 tmp.push(allWordsOfThePhrase[i]);
               }
             }
