@@ -73,13 +73,17 @@ exports.searchTranslation = async (req, res, next) => {
           }
 
           if (word["type"] === "word") {
-            // picking all the words of the searched phrase, replacing escape characters with a space, then making it an array of strings
+            // picking all the words of the searched phrase, replacing escape characters with a space,
+            // replacing multiple spaces with a single space and then making it an array of strings
             let allWordsOfThePhrase = word["label"]
               .replaceAll(new RegExp(regexp.skipChars, "gm"), " ")
+              .replace(/\s\s+/g, " ")
               .split(" ");
 
             // filtering the array from duplications
             allWordsOfThePhrase = [...new Set(allWordsOfThePhrase)];
+
+            console.log("sdfds", allWordsOfThePhrase);
 
             // cleaning the array from the exceptions, saving into another array and then rewriting the back
             let tmp = [];
