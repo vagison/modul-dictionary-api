@@ -13,6 +13,12 @@ const Definition = require("../../../models/data/definition");
 const Field = require("../../../models/data/field");
 const FieldConnector = require("../../../models/data/field-connector");
 
+// importing RegExp
+const regexp = require("../../../util/regexp");
+
+// importing Exceptions
+const exceptions = require("../../../util/exceptions.js");
+
 // --- Setting up and exporting translation's searching function
 exports.searchTranslation = async (req, res, next) => {
   try {
@@ -40,6 +46,7 @@ exports.searchTranslation = async (req, res, next) => {
               englishWordId: "translations.english.id",
               armenianWordColumnName: "word",
               englishWordColumnName: "translations.english.word",
+              exceptionsList: exceptions.armenianExceptions,
             };
           } else if (direction === 1) {
             params = {
@@ -50,6 +57,7 @@ exports.searchTranslation = async (req, res, next) => {
               englishWordId: "id",
               armenianWordColumnName: "translations.armenian.word",
               englishWordColumnName: "word",
+              exceptionsList: exceptions.englishExceptions,
             };
           }
           return params;
@@ -65,14 +73,49 @@ exports.searchTranslation = async (req, res, next) => {
           }
 
           if (word["type"] === "word") {
-            params = {
-              [Op.or]: [
-                {
-                  word: {
-                    [Op.like]: `%${word["label"]}%`,
-                  },
+            // picking all the words of the searched phrase, replacing escape characters with a space, then making it an array of strings
+            let allWordsOfThePhrase = word["label"]
+              .replaceAll(new RegExp(regexp.skipChars, "gm"), " ")
+              .split(" ");
+
+            // filtering the array from duplications
+            allWordsOfThePhrase = [...new Set(allWordsOfThePhrase)];
+
+            // cleaning the array from the exceptions, saving into another array and then rewriting the back
+            let tmp = [];
+            for (let i = 0; i < allWordsOfThePhrase.length; i++) {
+              if (!exceptionsList.includes(allWordsOfThePhrase[i])) {
+                tmp.push(allWordsOfThePhrase[i]);
+              }
+            }
+            allWordsOfThePhrase = tmp;
+
+            // creating a criteria for querying the words
+            let allPossibleOptions = [];
+            for (i = 0; i < allWordsOfThePhrase.length; i++) {
+              allPossibleOptions.push({
+                word: {
+                  [Op.like]: `${allWordsOfThePhrase[i]}%`,
                 },
-              ],
+              });
+              allPossibleOptions.push({
+                word: {
+                  [Op.like]: `% ${allWordsOfThePhrase[i]}%`,
+                },
+              });
+              allPossibleOptions.push({
+                word: {
+                  [Op.like]: `%-${allWordsOfThePhrase[i]}%`,
+                },
+              });
+              allPossibleOptions.push({
+                word: {
+                  [Op.like]: `%/${allWordsOfThePhrase[i]}%`,
+                },
+              });
+            }
+            params = {
+              [Op.or]: allPossibleOptions,
             };
           }
           return params;
@@ -94,7 +137,7 @@ exports.searchTranslation = async (req, res, next) => {
             },
             order: [
               [Translation, PartOfSpeech, "id", "ASC"],
-              ["word", "ASC"],
+              // ["word", "ASC"],
               [Translation, quality, "DESC"],
             ],
             raw: true,
@@ -143,15 +186,17 @@ exports.searchTranslation = async (req, res, next) => {
           });
         }
 
-
-
         // Picked translations related definitions selecting function
         async function definitionsPicker(translationsIds) {
           return await Definition.findAll({
             where: {
               translationId: { [Op.in]: translationsIds },
             },
-            attributes: ["translationId", "englishDefinition", "armenianDefinition"],
+            attributes: [
+              "translationId",
+              "englishDefinition",
+              "armenianDefinition",
+            ],
             raw: true,
           });
         }
@@ -232,7 +277,8 @@ exports.searchTranslation = async (req, res, next) => {
             if (allDefinitions.length !== 0) {
               let definitions = allDefinitions.filter(
                 (definition) =>
-                  definition["translationId"] === eachTranslation["translationId"]
+                  definition["translationId"] ===
+                  eachTranslation["translationId"]
               );
               if (definitions.length !== 0) {
                 definitions.forEach((d) => delete d.translationId);
@@ -259,6 +305,7 @@ exports.searchTranslation = async (req, res, next) => {
           englishWordId,
           armenianWordColumnName,
           englishWordColumnName,
+          exceptionsList,
         } = await languageParamsSetter(direction);
 
         // Defining searching parameters
@@ -297,8 +344,7 @@ exports.searchTranslation = async (req, res, next) => {
         if (response) {
           // Sending successfully found translations and the status code
           return res.status(200).send(response);
-        }
-        else {
+        } else {
           // If there was no translation - send status 500
           return res.status(500).send("Nothing found to sent!");
         }
@@ -307,9 +353,7 @@ exports.searchTranslation = async (req, res, next) => {
         return res.status(500).send("Wrong data to find translations!");
       }
     }
-  }
-
-  catch (error) {
+  } catch (error) {
     // If there was another error - send status 500
     return res.status(500).send("Something else broke!");
   }
